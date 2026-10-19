@@ -14,7 +14,7 @@ Thêm vào `.mcp.json` của dự án (xem `.mcp.example.json`):
 { "mcpServers": { "design-kit": { "command": "node", "args": ["/abs/path/design-kit/mcp/src/server.ts"] } } }
 ```
 
-`measure_first_screen` cần Playwright: `npm i playwright && npx playwright install chromium` trong `mcp/`, hoặc đặt `DESIGN_KIT_PLAYWRIGHT` trỏ tới `node_modules/playwright/index.mjs` của một dự án đã cài.
+`measure_first_screen` cần Chromium: `npx playwright install chromium` trong `mcp/` một lần (Playwright đã nằm trong `optionalDependencies`). Hoặc đặt `DESIGN_KIT_PLAYWRIGHT` trỏ tới `node_modules/playwright/index.mjs` của một dự án đã cài để dùng chung bản của dự án đó.
 
 ## Công cụ
 

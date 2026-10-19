@@ -2,10 +2,9 @@
   "mcpServers": {
     "design-kit": {
       "command": "node",
-      "args": ["/home/patrickstar/Desktop/design-kit/mcp/src/server.ts"],
-      "env": {
-        "DESIGN_KIT_PLAYWRIGHT": "/path/to/a/project/node_modules/playwright/index.mjs"
-      }
+      "args": [
+        "/home/patrickstar/Desktop/design-kit/mcp/src/server.ts"
+      ]
     }
   }
 }
