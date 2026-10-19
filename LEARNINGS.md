@@ -43,6 +43,7 @@ Tổng cộng: 25 artboard, canvas 40 phiên bản, 12 phase design v2, 18 PR, �
 6. **Quyết định kiến trúc điều hướng (5 tab, ô giữa là Tìm) ở phase 1 bị lật ở phase 12.** Nguyên nhân: tôi thiết kế thanh tab theo "sản phẩm có gì" chứ không theo "người mới cần gì". Thước đo "số khái niệm trong màn đầu" lẽ ra phải có trước khi vẽ thanh tab.
 7. **Đội tester chạy sau khi code xong phase 0**, phát hiện 3 lỗi chặn. Nếu chạy trên mockup (như artboard 19 đã làm ở v21–22) thì rẻ hơn.
 8. **Tôi chỉ dẫn chủ dự án làm một việc không tồn tại** ("xoá SPONGE BOB trong Console", trong khi Console không có chức năng đó). Lần sau: kiểm tra chức năng có thật trước khi giao việc cho người.
+10. **Tôi coi một hồ sơ thật là bản thử.** "SPONGE BOB" với ảnh hoạt hình trông như dữ liệu thử nên tôi đề xuất gỡ, xây cả công cụ ẩn (PR #18); chủ dự án cho biết đó là hồ sơ của một người dùng thật. Nội dung lạ không phải là nội dung sai. Lần sau: hỏi chủ dự án trước khi đánh giá một bản ghi là rác, và không bao giờ đề xuất xoá hay ẩn nội dung của người dùng dựa trên cảm nhận.
 9. **Làm thiếu một nửa lựa chọn của chủ dự án** ở phase 12: phương án "Thêm" họ chọn ghi rõ "Thêm lịch" nằm trong "Thêm" và nút chính cố định ở đáy, nhưng commit đầu vẫn để "Thêm lịch" và "Chỉ đường" ở phần thông tin, còn "Chọn vé" trùng với thanh "Mua vé". Phải sửa bằng commit thứ hai. Lần sau: chép nguyên văn lựa chọn đã chọn thành checklist trước khi code.
 
 ## 3. Cách thực hiện
@@ -99,6 +100,7 @@ Tổng cộng: 25 artboard, canvas 40 phiên bản, 12 phase design v2, 18 PR, �
 | Thanh tab 5 mục rồi 4 mục | Thiết kế theo tính năng, không theo người mới | Chủ dự án phàn nàn | Đếm khái niệm trước khi vẽ điều hướng |
 | Thiếu nửa lựa chọn "Thêm" ở phase 12 | Không chép nguyên văn lựa chọn đã chọn | Tự rà lại trước khi báo | Lựa chọn → checklist → code |
 | Chỉ dẫn xoá hồ sơ trong Console (không có chức năng) | Không kiểm tra trước | Khi bắt tay làm | Kiểm tra route/chức năng tồn tại trước khi giao việc |
+| Đề xuất ẩn một hồ sơ thật vì trông như bản thử | Đánh giá nội dung bằng cảm nhận | Chủ dự án nói | Hỏi trước khi gọi một bản ghi là rác; không đề xuất xoá nội dung của người dùng |
 | Tên nghệ sĩ trong Console 38×52 px | Link co lại bằng nội dung khi có nhãn bên cạnh | Cổng vùng chạm | Link trong cell: `min-w-0 flex-1` |
 | GitHub auto-merge bị từ chối | Chính sách của môi trường | — | Chờ chữ "merge" của chủ dự án; không tìm đường khác |
 
@@ -149,7 +151,7 @@ Bài học của bảng này: 8,5 → 7 không phải là thụt lùi; đó là 
 3. **Khoá màu trong một buổi**: 3 phương án trên nền thật trong một artboard, chọn một, ghi ngày. Quy ước "màu nói một câu" (thông tin / hành động / trạng thái) áp cho mọi dự án.
 4. **Token theo vai trò + lint cấm hex + ngân sách px** trước khi viết màn hình đầu tiên. Chi phí: nửa ngày. Tiết kiệm: toàn bộ phase 0 (một ngày và 117 file codemod).
 5. **Cổng trước phase**: layout 3 bề rộng, axe mọi vai trò, vùng chạm 44 px, CLS và JS có ngân sách, so ảnh PR với base, checklist trong PR. Bộ này bắt được 4 lỗi thật trong 3 ngày.
-6. **Seed phải xấu như production**: bản ghi không toạ độ, không giá, không ảnh, sai ngôn ngữ, tên thử. Cổng người mới chạy trên bộ này.
+6. **Seed phải xấu như production**: bản ghi không toạ độ, không giá, không ảnh, sai ngôn ngữ, tên lạ. Cổng người mới chạy trên bộ này. Và ngược lại: một bản ghi thật trông lạ không phải là lỗi; hỏi trước khi đề xuất gỡ.
 7. **Một màn một việc, ba khái niệm trước, một cách làm một việc, lùi chứ không bỏ.** Phần phụ vào một mục "Thêm" hoặc vào "Tôi"; chỉ hiện khi đã có dữ liệu.
 8. **Điều hướng theo người mới**: thanh tab ≤ 4 chỗ; tìm kiếm là biểu tượng; "Đăng" không chiếm góc của người đi chơi; mọi tên nội bộ (Radar, Hype, Nguồn) không xuất hiện trong màn đầu.
 9. **Quyết định của chủ dự án**: hỏi bằng 2–4 lựa chọn có hệ quả và một khuyến nghị; chép nguyên văn lựa chọn thành checklist; ghi vào CLAUDE.md kèm ngày; "merge" chỉ khi họ nói.
