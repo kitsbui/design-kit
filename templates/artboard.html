@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NN · Tên artboard</title>
+<!--
+  Mẫu artboard đánh giá thiết kế (giấy sáng, Noto Sans), đúng kiểu 25 artboard của FeestFinder design v2.
+  Một artboard = một câu kết luận ở đầu + bằng chứng + bảng + việc làm + câu hỏi cho chủ dự án.
+  Dùng cho Design artifact (.dc.html) hoặc mở thẳng trong trình duyệt. Chiều rộng 1440.
+-->
+<style>
+body{margin:0;background:#f7f8f8}
+.doc{width:1440px;box-sizing:border-box;padding:56px 64px;font-family:"Noto Sans",system-ui,sans-serif;color:#101010;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;gap:32px}
+.k{font-size:12px;line-height:1.3;letter-spacing:.05em;text-transform:uppercase;color:#57534f;font-weight:500}
+h1{margin:0;font-size:36px;line-height:1.1;letter-spacing:-.03em;font-weight:600;max-width:1100px}
+.h2{font-size:22px;line-height:1.25;letter-spacing:-.015em;font-weight:600;margin:0}
+.h3{font-size:16px;line-height:1.35;font-weight:600;margin:0}
+.p{font-size:14px;line-height:1.55;color:#2b2a28;margin:0;max-width:1100px}
+.s{font-size:13px;line-height:1.5;color:#57534f;margin:0}
+.card{background:#fff;border-radius:8px;box-shadow:inset 0 0 0 1px #dedbd6;padding:20px 24px;display:flex;flex-direction:column;gap:12px}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:start}
+.num{display:grid;grid-template-columns:minmax(0,1.6fr) 64px 92px 92px;gap:12px;padding:8px 0;border-top:1px solid #dedbd6;font-size:13px;color:#2b2a28;align-items:baseline}
+.num b{font-weight:600;color:#101010;font-variant-numeric:tabular-nums}
+.num .lo{color:#b4442c}.num .hi{color:#1f7a52}.num b small{display:block;font-weight:400;font-size:11px;color:#6b6862;line-height:1.3}
+.tr{display:grid;grid-template-columns:200px minmax(0,1fr) minmax(0,1fr);gap:16px;padding:12px 0;border-top:1px solid #dedbd6;font-size:14px;line-height:1.5}
+.sev{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:4px;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.sev-hi{background:#101010;color:#f7f8f8}.sev-md{background:#e8e6e1;color:#101010}
+.tag{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:4px;font-size:11px;font-weight:600}
+.tag.fold{background:#fbe9c6}.tag.keep{background:#d9f0e3}.tag.later{background:#e8e6e1}
+.dark{background:#08090a;color:#d0d6e0;border-radius:8px;padding:16px;font-size:13px}
+.phone{width:390px;background:#08090a;border-radius:16px;box-shadow:inset 0 0 0 1px #23252a;overflow:hidden;color:#d0d6e0}
+ul{margin:0;padding-left:18px;font-size:13px;line-height:1.55;color:#2b2a28;display:flex;flex-direction:column;gap:4px}
+</style>
+</head>
+<body>
+<div class="doc">
+  <header style="display:flex;flex-direction:column;gap:12px">
+    <span class="k">NN · Tên artboard · ai chấm · dd.mm.yyyy</span>
+    <h1>Một câu kết luận: vấn đề lớn nhất là gì và đề xuất đổi cái gì.</h1>
+    <p class="p">Hai ba câu bối cảnh: chấm trên đâu (production/preview), bề rộng nào, dữ liệu nào, chủ dự án đã nói gì.</p>
+  </header>
+
+  <section class="grid2">
+    <div class="card">
+      <h2 class="h2">Đo trên … · điện thoại, người mới</h2>
+      <div class="num" style="border-top:0"><span class="k">Chỉ số</span><span class="k">Trước</span><span class="k">Nay</span><span class="k">Mục tiêu</span></div>
+      <div class="num"><span>Chỗ bấm trong màn đầu danh sách</span><b class="lo">22</b><b class="now">19<small>4 nút thời gian thay 2 menu</small></b><b class="hi">≤ 12</b></div>
+      <div class="num"><span>Chỗ bấm trong màn đầu chi tiết</span><b class="lo">15</b><b class="hi">10<small>4 + khung 6</small></b><b class="hi">≤ 7</b></div>
+      <p class="s">Cách đếm: Playwright, iPhone 13 giả lập, chưa đăng nhập; mcp `measure_first_screen` hoặc gates/first-screen.spec.ts.</p>
+    </div>
+    <div class="card">
+      <h2 class="h2">Bảng điểm · 7 tiêu chí</h2>
+      <div class="tr" style="border-top:0"><span class="k">Tiêu chí</span><span class="k">Điểm</span><span class="k">Bằng chứng</span></div>
+      <div class="tr"><span>Bố cục</span><span>5</span><span>5 hàng điều khiển trước nội dung đầu tiên (ảnh 1)</span></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="h2">Bằng chứng</h2>
+    <div class="grid3">
+      <div class="phone" style="height:300px"><!-- ảnh chụp 390 --></div>
+      <div class="phone" style="height:300px"></div>
+      <div class="phone" style="height:300px"></div>
+    </div>
+  </section>
+
+  <section class="grid2">
+    <div class="card"><span class="h3">Việc làm · phase N · ước lượng</span><ul><li>…</li></ul></div>
+    <div class="card"><span class="h3">Chủ dự án quyết</span><ul><li>Lựa chọn A (khuyến nghị): … hệ quả …</li><li>Lựa chọn B: …</li></ul></div>
+  </section>
+</div>
+</body>
+</html>

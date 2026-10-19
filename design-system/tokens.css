@@ -1,0 +1,135 @@
+/*
+ * Token của hệ thống thiết kế, sinh từ tokens.json (2026-10-17): KHÔNG sửa tay, sửa JSON rồi chạy
+ * node scripts/build-tokens.mjs. Đây là tệp duy nhất được viết hex (gates/check-tokens.ts giữ phần còn lại).
+ * Màu nói một câu: info là thông tin, dải info → lime là hành động duy nhất của màn hình, trạng thái là chấm kèm chữ.
+ */
+
+@theme {
+  --color-*: initial;
+  --color-surface-0: #08090a;   /* trang */
+  --color-surface-1: #0f1011;   /* nav, rail, panel, thẻ */
+  --color-surface-2: #161718;   /* ô nhập, chip, tile chữ, phần nổi */
+  --color-map: #0b0c0d;         /* dưới bản đồ trước khi tile vẽ */
+  --color-line-1: #23252a;      /* chia dòng, khung panel */
+  --color-line-2: #383b3f;      /* nút phụ, viền hover */
+  --color-fg-1: #f7f8f8;        /* tiêu đề, giá, tên */
+  --color-fg-2: #d0d6e0;        /* thân */
+  --color-fg-3: #8a8f98;        /* meta, nhãn (6:1 trên surface-0) */
+  --color-inverse: #eeeeee;     /* bề mặt sáng (avatar, thẻ vé) */
+  --color-on-inverse: #101010;  /* chữ trên bề mặt sáng */
+  --color-on-inverse-2: #57534f; /* meta trên bề mặt sáng */
+  --color-info: #00d9d0;        /* thông tin: tên nhóm, link, mục đang chọn, số đếm, miễn phí */
+  --color-accent-mid: #72e679;  /* mốc giữa của dải hành động */
+  --color-lime: #e4f222;        /* mốc cuối của dải; focus ring và glow (chỉ trên nền tối) */
+  --color-on-accent: #08090a;   /* chữ trên info, lime và dải */
+  --color-ok: #2fb37a;          /* chấm ổn (cách xa accent-mid) */
+  --color-warn: #f0b429;        /* chấm chú ý */
+  --color-bad: #eb5757;         /* chấm lỗi, hết */
+  --color-white: #ffffff;       
+  --color-black: #000000;       
+
+  --font-*: initial;
+  --font-sans: "Noto Sans Variable", "Noto Sans Thai Variable", "Noto Sans JP Variable", "Noto Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --text-d0: clamp(44px, 6.6vw, 92px); /* chỉ trang giới thiệu */
+  --text-d0--line-height: 0.96;
+  --text-d0--letter-spacing: -0.045em;
+  --text-d0--font-weight: 700;
+  --text-d1: clamp(36px, 4.6vw, 56px); /* h1 chi tiết */
+  --text-d1--line-height: 1;
+  --text-d1--letter-spacing: -0.04em;
+  --text-d1--font-weight: 700;
+  --text-d2: 32px; /* h1 danh sách */
+  --text-d2--line-height: 1.06;
+  --text-d2--letter-spacing: -0.035em;
+  --text-d2--font-weight: 700;
+  --text-d3: 24px; /* h2 mục */
+  --text-d3--line-height: 1.15;
+  --text-d3--letter-spacing: -0.025em;
+  --text-d3--font-weight: 700;
+  --text-h: 17px; /* tên thẻ */
+  --text-h--line-height: 1.3;
+  --text-h--letter-spacing: -0.015em;
+  --text-h--font-weight: 600;
+  --text-hs: 15px; /* tên hàng */
+  --text-hs--line-height: 1.35;
+  --text-hs--letter-spacing: -0.01em;
+  --text-hs--font-weight: 600;
+  --text-tl: 17px; /* thân lớn */
+  --text-tl--line-height: 1.55;
+  --text-t: 15px; /* thân */
+  --text-t--line-height: 1.55;
+  --text-s: 13px; /* meta */
+  --text-s--line-height: 1.4;
+  --text-m: 11px; /* hoa, tracking .06em: đầu bảng và tag */
+  --text-m--line-height: 1.2;
+  --text-mb: 13px; /* 500, tabular: giá */
+  --text-mb--line-height: 1.4;
+
+  --radius-tag: 4px;
+  --radius-btn: 8px;
+  --radius-seg: 8px;
+  --radius-opt: 8px;
+  --radius-card: 8px;
+  --radius-org: 8px;
+  --radius-sheet: 16px;
+  --radius-pill: 9999px;
+
+  --breakpoint-tab: 760px;
+  --breakpoint-desk: 900px;
+  --breakpoint-wide: 1200px;
+  --container-read: 760px;
+
+  --dur-1: 120ms;
+  --dur-2: 200ms;
+  --dur-3: 320ms;
+  --ease-ff: cubic-bezier(0.4, 0, 0.2, 1);
+  --animate-kd-glow: kd-glow 2.4s ease-in-out infinite;
+}
+
+@keyframes kd-glow {
+  0%, 100% { box-shadow: 0 0 0 0 transparent; }
+  50% { box-shadow: 0 0 22px 2px color-mix(in srgb, var(--color-lime) 50%, transparent); }
+}
+
+@layer base {
+  :root {
+    --gradient-accent: linear-gradient(135deg, var(--color-info), var(--color-accent-mid) 50%, var(--color-lime));
+    --kd-gutter: 16px;
+  }
+  @media (min-width: 760px) { :root { --kd-gutter: 32px; } }
+  @media (min-width: 900px) { :root { --kd-gutter: clamp(32px, 4vw, 64px); } }
+  html { background: var(--color-surface-0); color-scheme: dark; }
+  body { font-family: var(--font-sans); font-size: 15px; line-height: 1.5; letter-spacing: -0.01em; color: var(--color-fg-2); background: var(--color-surface-0); -webkit-font-smoothing: antialiased; }
+  ::selection { background: var(--color-info); color: var(--color-on-accent); }
+  :focus-visible { outline: 2px solid var(--color-lime); outline-offset: 2px; }
+  code, kbd, samp, pre { font-family: inherit; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+  /* Biến thể sáng: cùng vai trò, giá trị khác; lime đơn sắc không dùng trên nền sáng (focus = info). */
+  :root[data-theme="light"] {
+    --color-surface-0: #f7f8f8;   /* trang */
+    --color-surface-1: #ffffff;   /* nav, rail, panel, thẻ */
+    --color-surface-2: #efeeeb;   /* ô nhập, chip, tile chữ */
+    --color-map: #e9ebee;         
+    --color-line-1: #dedbd6;      
+    --color-line-2: #c9c5bf;      
+    --color-fg-1: #101010;        
+    --color-fg-2: #2b2a28;        
+    --color-fg-3: #57534f;        /* (7:1 trên surface-0) */
+    --color-inverse: #101010;     /* bề mặt tối trên nền sáng */
+    --color-on-inverse: #f7f8f8;  
+    --color-on-inverse-2: #8a8f98; 
+    --color-info: #0a8f8a;        /* turquoise đậm để đạt 4,5:1 trên trắng */
+    --color-accent-mid: #72e679;  
+    --color-lime: #e4f222;        /* KHÔNG dùng đơn sắc trên nền sáng: focus ring dùng info */
+    --color-on-accent: #08090a;   
+    --color-ok: #1f7a52;          
+    --color-warn: #b4442c;        
+    --color-bad: #c62828;         
+    --color-white: #ffffff;       
+    --color-black: #000000;       
+    color-scheme: light;
+  }
+  :root[data-theme="light"] :focus-visible { outline-color: var(--color-info); }
+}
