@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buổi thử 5 người</title>
+<meta name="description" content="Kịch bản có đồng hồ, phiếu ghi, SUS tự tính và bảng kết quả dán vào roadmap, cho một buổi thử với năm người thật trên điện thoại của họ.">
+<style>
+  :root { --surface-0: #08090a; --surface-1: #121315; --surface-2: #1b1d20; --line-1: #26292d; --line-2: #3a3e44; --fg-1: #f2f3f4; --fg-2: #b4b8be; --fg-3: #80858c; --info: #00d9d0; --lime: #e4f222; --ok: #72e679; --warn: #f5c542; --bad: #ff5c5c; color-scheme: dark; }
+  :root:not([data-theme="dark"]) { @media (prefers-color-scheme: light) { --surface-0: #f7f7f8; --surface-1: #ffffff; --surface-2: #eef0f2; --line-1: #dfe2e6; --line-2: #c5c9cf; --fg-1: #121315; --fg-2: #40444a; --fg-3: #6b7078; color-scheme: light; } }
+  :root[data-theme="light"] { --surface-0: #f7f7f8; --surface-1: #ffffff; --surface-2: #eef0f2; --line-1: #dfe2e6; --line-2: #c5c9cf; --fg-1: #121315; --fg-2: #40444a; --fg-3: #6b7078; color-scheme: light; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--surface-0); color: var(--fg-1); font: 16px/1.45 "Noto Sans", system-ui, sans-serif; }
+  .wrap { padding: 16px; max-width: 1100px; margin: 0 auto; }
+  @media (min-width: 720px) { .wrap { padding: 32px; } }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  h2 { font-size: 17px; margin: 24px 0 8px; }
+  .s { color: var(--fg-3); font-size: 14px; }
+  .card { background: var(--surface-1); border: 1px solid var(--line-1); border-radius: 16px; padding: 16px; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line-1); margin: 12px 0 16px; overflow: hidden; }
+  .tabs button { background: none; border: 0; border-bottom: 2px solid transparent; color: var(--fg-3); padding: 10px 12px; min-height: 44px; font: inherit; cursor: pointer; }
+  .tabs button[aria-selected="true"] { color: var(--info); border-bottom-color: var(--info); }
+  button.b { font: inherit; min-height: 44px; padding: 0 16px; border-radius: 8px; border: 1px solid var(--line-2); background: var(--surface-2); color: var(--fg-1); cursor: pointer; }
+  button.b.acc { background: linear-gradient(90deg, #00d9d0, #72e679, #e4f222); color: #08090a; border: 0; font-weight: 600; }
+  button.b.sm { min-height: 36px; padding: 0 10px; font-size: 14px; }
+  button.b[aria-pressed="true"] { border-color: var(--info); color: var(--info); }
+  input, textarea, select { font: inherit; background: var(--surface-2); color: var(--fg-1); border: 1px solid var(--line-2); border-radius: 8px; padding: 10px 12px; min-height: 44px; width: 100%; }
+  textarea { min-height: 72px; }
+  label { display: block; font-size: 13px; color: var(--fg-2); margin: 10px 0 4px; }
+  .task { border-top: 1px solid var(--line-1); padding: 12px 0; }
+  .task:first-child { border-top: 0; }
+  .task .t { font-weight: 600; }
+  .clock { font-variant-numeric: tabular-nums; font-size: 28px; min-width: 88px; }
+  .good { color: var(--ok); } .mid { color: var(--warn); } .poor { color: var(--bad); } .info { color: var(--info); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line-1); vertical-align: top; }
+  th { color: var(--fg-3); font-weight: 500; }
+  .num { font-variant-numeric: tabular-nums; text-align: right; }
+  .sus label { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; border-top: 1px solid var(--line-1); padding: 8px 0; margin: 0; color: var(--fg-1); font-size: 15px; }
+  .sus .pick { display: flex; gap: 4px; }
+  .sus .pick button { min-width: 40px; min-height: 40px; }
+  pre { white-space: pre-wrap; font: 13px/1.4 "Noto Sans", system-ui, sans-serif; background: var(--surface-2); padding: 12px; border-radius: 8px; overflow-x: auto; }
+  .verdict { font-size: 18px; font-weight: 600; }
+  .hid { display: none; }
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Buổi thử 5 người</h1>
+  <p class="s">Một người một lượt, 30 phút, trên điện thoại của họ, nói to điều đang nghĩ. Bạn chỉ đọc việc, bấm đồng hồ và ghi; không gợi ý trong 60 giây đầu. Mọi thứ lưu trên máy này.</p>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="setup">Chuẩn bị</button>
+    <button role="tab" aria-selected="false" data-tab="session">Buổi thử</button>
+    <button role="tab" aria-selected="false" data-tab="results">Kết quả</button>
+  </div>
+
+  <section id="setup" role="tabpanel">
+    <div class="card">
+      <label for="project">Sản phẩm (địa chỉ người thử mở)</label>
+      <input id="project" placeholder="https://feestfinder.com">
+      <h2>Người thử</h2>
+      <p class="s">Năm người chưa dùng sản phẩm: tên gọi và vai. Vai quyết định bộ việc.</p>
+      <div id="people"></div>
+      <h2>Việc theo vai</h2>
+      <p class="s">Mỗi việc một câu, như bạn sẽ đọc cho họ. Việc đầu của người đi chơi là "đêm đầu tiên trong 10 giây".</p>
+      <div id="tasks"></div>
+      <div class="row" style="margin-top:12px"><button class="b" id="reset">Về mẫu FeestFinder</button><button class="b" id="export-json">Tải JSON</button><label class="b" style="display:inline-flex;align-items:center;margin:0;width:auto">Nhập JSON <input type="file" id="import-json" accept="application/json" class="hid"></label></div>
+    </div>
+  </section>
+
+  <section id="session" role="tabpanel" class="hid">
+    <div class="card">
+      <label for="who">Ai đang thử</label>
+      <select id="who"></select>
+      <div id="run"></div>
+      <h2>SUS · 10 câu, 1 = hoàn toàn không đồng ý, 5 = hoàn toàn đồng ý</h2>
+      <div class="sus" id="sus"></div>
+      <p class="s">Điểm SUS: <b id="sus-score" class="info">—</b></p>
+    </div>
+  </section>
+
+  <section id="results" role="tabpanel" class="hid">
+    <div class="card">
+      <p class="verdict" id="verdict">—</p>
+      <p class="s" id="verdict-why"></p>
+      <div style="overflow-x:auto"><table id="table"></table></div>
+      <h2>Chỗ ≥ 2 người ngập ngừng · sửa trong 2 ngày</h2>
+      <ul id="hesitations"></ul>
+      <h2>Dán vào roadmap</h2>
+      <div class="row"><button class="b acc" id="copy-md">Chép bảng Markdown</button><span class="s" id="copied"></span></div>
+      <pre id="md"></pre>
+    </div>
+  </section>
+</div>
+
+<script>
+(() => {
+  const KEY = 'usertest:v1';
+  const ROLES = { fan: 'Đi chơi', organizer: 'Nhà tổ chức', artist: 'Nghệ sĩ' };
+  const TEMPLATE = {
+    project: 'https://feestfinder.com',
+    people: [
+      { name: 'Người 1', role: 'fan' }, { name: 'Người 2', role: 'fan' },
+      { name: 'Người 3', role: 'organizer' }, { name: 'Người 4', role: 'organizer' },
+      { name: 'Người 5', role: 'artist' },
+    ],
+    tasks: {
+      fan: [
+        'Mở trang. Chỉ cho tôi một đêm nhạc bạn có thể đi tối nay hoặc cuối tuần này. (mục tiêu: 10 giây)',
+        'Tìm một đêm techno ở thành phố của bạn và cho tôi biết giá vé.',
+        'Lưu đêm đó để xem lại sau, rồi mở lại từ chỗ đã lưu.',
+        'Xem đường đi tới địa điểm của đêm đó.',
+        'Mua một vé cho đêm đó (dừng ở bước thanh toán).',
+      ],
+      organizer: [
+        'Bạn tổ chức một đêm nhạc tháng sau. Đăng nó lên đây, tới lúc gửi duyệt.',
+        'Thêm ảnh bìa và giá vé cho đêm vừa đăng.',
+        'Xem đêm của bạn sẽ hiện ra với người xem như thế nào.',
+        'Tìm chỗ xem bao nhiêu người đã xem và bấm mua vé.',
+        'Trả lời một câu hỏi của khách về đêm đó.',
+      ],
+      artist: [
+        'Tìm hồ sơ nghệ sĩ của bạn (hoặc tạo một hồ sơ) và nhận nó là của bạn.',
+        'Thêm một mix SoundCloud vào hồ sơ.',
+        'Ghi rằng bạn sẽ diễn ở một đêm có trên trang.',
+        'Mở danh sách gig đang tuyển và ứng tuyển một gig.',
+        'Đặt ngày bạn rảnh tháng tới.',
+      ],
+    },
+    results: {},
+  };
+  const SUS = [
+    'Tôi nghĩ mình sẽ muốn dùng sản phẩm này thường xuyên.',
+    'Tôi thấy sản phẩm phức tạp một cách không cần thiết.',
+    'Tôi thấy sản phẩm dễ dùng.',
+    'Tôi nghĩ mình cần người hỗ trợ kỹ thuật mới dùng được.',
+    'Tôi thấy các chức năng được tích hợp tốt với nhau.',
+    'Tôi thấy có quá nhiều thứ không nhất quán.',
+    'Tôi nghĩ phần lớn mọi người sẽ học dùng rất nhanh.',
+    'Tôi thấy sản phẩm rất rườm rà.',
+    'Tôi thấy tự tin khi dùng.',
+    'Tôi phải học nhiều thứ trước khi dùng được.',
+  ];
+
+  let state = load();
+  function load() { try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s && s.people && s.tasks) return s; } catch {} return structuredClone(TEMPLATE); }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} }
+  const $ = (s, el = document) => el.querySelector(s);
+  const el = (tag, attrs = {}, ...kids) => { const n = document.createElement(tag); for (const [k, v] of Object.entries(attrs)) { if (k === 'class') n.className = v; else if (k.startsWith('on')) n.addEventListener(k.slice(2), v); else n.setAttribute(k, v); } for (const k of kids) n.append(k); return n; };
+  const fmt = (ms) => { const s = Math.round(ms / 1000); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
+
+  // ---- tabs
+  document.querySelectorAll('[role=tab]').forEach((b) => b.addEventListener('click', () => {
+    document.querySelectorAll('[role=tab]').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+    document.querySelectorAll('[role=tabpanel]').forEach((p) => p.classList.toggle('hid', p.id !== b.dataset.tab));
+    if (b.dataset.tab === 'session') renderSession();
+    if (b.dataset.tab === 'results') renderResults();
+  }));
+
+  // ---- setup
+  function renderSetup() {
+    $('#project').value = state.project;
+    const people = $('#people'); people.replaceChildren();
+    state.people.forEach((p, i) => {
+      const name = el('input', { value: p.name, 'aria-label': `Tên người ${i + 1}`, oninput: (e) => { p.name = e.target.value; save(); } });
+      const role = el('select', { 'aria-label': `Vai người ${i + 1}`, onchange: (e) => { p.role = e.target.value; save(); } });
+      for (const [k, v] of Object.entries(ROLES)) role.append(el('option', { value: k, ...(p.role === k ? { selected: '' } : {}) }, v));
+      people.append(el('div', { class: 'row', style: 'margin:6px 0' }, el('div', { style: 'flex:2;min-width:140px' }, name), el('div', { style: 'flex:1;min-width:140px' }, role)));
+    });
+    const tasks = $('#tasks'); tasks.replaceChildren();
+    for (const [role, list] of Object.entries(state.tasks)) {
+      const box = el('div', { class: 'task' }, el('div', { class: 't' }, ROLES[role]));
+      list.forEach((t, i) => box.append(el('input', { value: t, style: 'margin:6px 0', 'aria-label': `${ROLES[role]} · việc ${i + 1}`, oninput: (e) => { list[i] = e.target.value; save(); } })));
+      tasks.append(box);
+    }
+  }
+  $('#project').addEventListener('input', (e) => { state.project = e.target.value; save(); });
+  $('#reset').addEventListener('click', () => { if (confirm('Về mẫu FeestFinder và xoá kết quả trên máy này?')) { state = structuredClone(TEMPLATE); save(); renderSetup(); } });
+  $('#export-json').addEventListener('click', () => { const a = el('a', { href: URL.createObjectURL(new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' })), download: 'usertest.json' }); a.click(); });
+  $('#import-json').addEventListener('change', async (e) => { const f = e.target.files[0]; if (!f) return; try { const s = JSON.parse(await f.text()); if (s.people && s.tasks) { state = s; save(); renderSetup(); } } catch { alert('Không đọc được file.'); } });
+
+  // ---- session
+  let timer = null;
+  function result(who, i) { const r = (state.results[who] ||= { tasks: {}, sus: {} }); return (r.tasks[i] ||= { ms: 0, outcome: null, hesitations: 0, note: '' }); }
+  function renderSession() {
+    const who = $('#who'); const prev = who.value; who.replaceChildren();
+    state.people.forEach((p, i) => who.append(el('option', { value: String(i) }, `${p.name} · ${ROLES[p.role]}`)));
+    if (prev) who.value = prev;
+    renderRun();
+  }
+  $('#who').addEventListener('change', renderRun);
+  function renderRun() {
+    if (timer) { clearInterval(timer); timer = null; }
+    const idx = Number($('#who').value || 0); const p = state.people[idx]; if (!p) return;
+    const run = $('#run'); run.replaceChildren();
+    state.tasks[p.role].forEach((t, i) => {
+      const r = result(idx, i);
+      const clock = el('span', { class: 'clock' }, fmt(r.ms));
+      let startedAt = null;
+      const startBtn = el('button', { class: 'b sm', onclick: () => {
+        if (startedAt) { r.ms += Date.now() - startedAt; startedAt = null; clearInterval(timer); timer = null; startBtn.textContent = 'Tiếp'; save(); }
+        else { startedAt = Date.now(); const base = r.ms; startBtn.textContent = 'Dừng'; timer = setInterval(() => { clock.textContent = fmt(base + Date.now() - startedAt); }, 250); }
+      } }, r.ms ? 'Tiếp' : 'Bắt đầu');
+      const outcomes = [['done', 'Xong, không gợi ý'], ['hint', 'Xong, có gợi ý'], ['fail', 'Không xong']].map(([k, label]) =>
+        el('button', { class: 'b sm', 'aria-pressed': String(r.outcome === k), onclick: (e) => { r.outcome = k; save(); e.target.parentNode.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === e.target))); } }, label));
+      const hes = el('span', { class: 'num', style: 'min-width:24px;text-align:center' }, String(r.hesitations));
+      run.append(el('div', { class: 'task' },
+        el('div', { class: 't' }, `${i + 1}. ${t}`),
+        el('div', { class: 'row', style: 'margin-top:8px' }, clock, startBtn, ...outcomes),
+        el('div', { class: 'row', style: 'margin-top:8px' }, el('span', { class: 's' }, 'Ngập ngừng'),
+          el('button', { class: 'b sm', 'aria-label': 'Bớt một ngập ngừng', onclick: () => { r.hesitations = Math.max(0, r.hesitations - 1); hes.textContent = String(r.hesitations); save(); } }, '−'), hes,
+          el('button', { class: 'b sm', 'aria-label': 'Thêm một ngập ngừng', onclick: () => { r.hesitations++; hes.textContent = String(r.hesitations); save(); } }, '+')),
+        el('textarea', { placeholder: 'Họ nói gì, dừng ở đâu, bấm nhầm gì', 'aria-label': `Ghi chú việc ${i + 1}`, oninput: (e) => { r.note = e.target.value; save(); } }, r.note),
+      ));
+    });
+    const sus = $('#sus'); sus.replaceChildren();
+    const answers = (state.results[idx] ||= { tasks: {}, sus: {} }).sus;
+    SUS.forEach((q, i) => {
+      const pick = el('span', { class: 'pick' });
+      for (let v = 1; v <= 5; v++) pick.append(el('button', { class: 'b sm', 'aria-pressed': String(answers[i] === v), onclick: (e) => { answers[i] = v; save(); pick.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === e.target))); $('#sus-score').textContent = susScore(answers) ?? '—'; } }, String(v)));
+      sus.append(el('label', {}, `${i + 1}. ${q}`, pick));
+    });
+    $('#sus-score').textContent = susScore(answers) ?? '—';
+  }
+  function susScore(a) { const vals = SUS.map((_, i) => a[i]); if (vals.some((v) => !v)) return null; return vals.reduce((s, v, i) => s + (i % 2 === 0 ? v - 1 : 5 - v), 0) * 2.5; }
+
+  // ---- results
+  function renderResults() {
+    const rows = []; const hes = new Map(); let unaided = 0, firstNight10s = 0, fans = 0, susList = [];
+    state.people.forEach((p, idx) => {
+      const r = state.results[idx] || { tasks: {}, sus: {} };
+      const tasks = state.tasks[p.role];
+      const done = tasks.filter((_, i) => r.tasks[i]?.outcome === 'done').length;
+      const main = r.tasks[0];
+      if (main?.outcome === 'done') unaided++;
+      if (p.role === 'fan') { fans++; if (main?.outcome === 'done' && main.ms <= 10_000) firstNight10s++; }
+      const sus = susScore(r.sus); if (sus !== null) susList.push(sus);
+      tasks.forEach((t, i) => { const x = r.tasks[i]; if (x?.hesitations >= 1) { const k = `${ROLES[p.role]} · ${i + 1}. ${t}`; hes.set(k, (hes.get(k) || 0) + 1); } });
+      rows.push({ name: p.name, role: ROLES[p.role], done, total: tasks.length, ms: tasks.reduce((s, _, i) => s + (r.tasks[i]?.ms || 0), 0), hesitations: tasks.reduce((s, _, i) => s + (r.tasks[i]?.hesitations || 0), 0), sus, notes: tasks.map((_, i) => r.tasks[i]?.note).filter(Boolean).join(' / ') });
+    });
+    const n = state.people.length; const susMean = susList.length ? Math.round(susList.reduce((a, b) => a + b, 0) / susList.length) : null;
+    const nine = unaided >= Math.ceil(n * 0.8); const ten = unaided === n && susMean !== null && susMean >= 80;
+    const v = $('#verdict'); v.className = 'verdict ' + (ten ? 'good' : nine ? 'mid' : 'poor');
+    v.textContent = ten ? 'Mức 10: 5/5 xong việc chính, SUS ≥ 80' : nine ? `Mức 9: ${unaided}/${n} xong việc chính không cần gợi ý` : `Chưa tới 9: ${unaided}/${n} xong việc chính không cần gợi ý`;
+    $('#verdict-why').textContent = `SUS trung bình ${susMean ?? '—'} · đêm đầu tiên trong 10 giây: ${firstNight10s}/${fans} người đi chơi`;
+    const table = $('#table'); table.replaceChildren(el('tr', {}, ...['Người', 'Vai', 'Xong', 'Thời gian', 'Ngập ngừng', 'SUS', 'Ghi chú'].map((h) => el('th', {}, h))));
+    rows.forEach((r) => table.append(el('tr', {}, el('td', {}, r.name), el('td', {}, r.role), el('td', { class: 'num' }, `${r.done}/${r.total}`), el('td', { class: 'num' }, fmt(r.ms)), el('td', { class: 'num' }, String(r.hesitations)), el('td', { class: 'num' }, r.sus === null ? '—' : String(r.sus)), el('td', {}, r.notes))));
+    const list = $('#hesitations'); list.replaceChildren();
+    const shared = [...hes].filter(([, c]) => c >= 2).sort((a, b) => b[1] - a[1]);
+    if (!shared.length) list.append(el('li', { class: 's' }, 'Chưa có chỗ nào hai người cùng ngập ngừng.'));
+    shared.forEach(([k, c]) => list.append(el('li', {}, `${k} — ${c} người`)));
+    const md = [`| Người | Vai | Xong | Thời gian | Ngập ngừng | SUS |`, `| --- | --- | --- | --- | --- | --- |`,
+      ...rows.map((r) => `| ${r.name} | ${r.role} | ${r.done}/${r.total} | ${fmt(r.ms)} | ${r.hesitations} | ${r.sus ?? '—'} |`),
+      ``, `- ${new Date().toISOString().slice(0, 10)}: buổi thử ${n} người (${state.project}): ${unaided}/${n} xong việc chính không cần gợi ý; đêm đầu tiên trong 10 giây ${firstNight10s}/${fans}; SUS trung bình ${susMean ?? '—'}. ${shared.length ? 'Sửa trong 2 ngày: ' + shared.map(([k, c]) => `${k} (${c})`).join('; ') + '.' : 'Không có chỗ hai người cùng ngập ngừng.'}`].join('\n');
+    $('#md').textContent = md;
+    $('#copy-md').onclick = async () => { try { await navigator.clipboard.writeText(md); $('#copied').textContent = 'Đã chép'; } catch { $('#copied').textContent = 'Chọn và chép tay'; } };
+  }
+
+  renderSetup();
+})();
+</script>
+</body>
+</html>
