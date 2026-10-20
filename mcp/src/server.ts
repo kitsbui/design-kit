@@ -260,7 +260,7 @@ export function checkPost(p: {
   const paras = body.split(/\n\s*\n/).map((x) => x.trim()).filter(Boolean);
   const first = paras[0] ?? '';
   // The whole paragraph in bold, or the term in bold at its start ("**Techno** is …").
-  const def = /^\*\*[\s\S]+\*\*$/.test(first) || /^\*\*[^*\n]{1,60}\*\*\s+\S/.test(first);
+  const def = /^\*\*[\s\S]+\*\*$/.test(first) || /^\*\*[^*\n]{1,60}\*\*[\s,:;(—–-]/.test(first);
   const dw = words(first);
   const [lo, hi] = vi ? [40, 90] : [40, 60];
   add(guide ? def && dw >= lo && dw <= hi : def ? true : 'warn', `opens with a definition of ${lo}–${hi} ${vi ? 'syllables' : 'words'}, the term in bold`, def ? dw : 'not bold');
@@ -298,7 +298,15 @@ export function checkPost(p: {
   } else if (guide) add(false, '5 questions (faq)', 'none');
   if (p.sources) {
     const urls = p.sources.map((x) => (typeof x === 'string' ? x : x.url));
-    const hosts = new Set(urls.map((u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return u; } }));
+    // A publisher is a registrable domain: en.wikipedia.org and vi.wikipedia.org are one (Wikipedia).
+    const site = (u: string) => {
+      try {
+        const labels = new URL(u).hostname.split('.');
+        const n = /^(co|com|org|net|ac|gov|edu)$/.test(labels.at(-2) ?? '') && labels.length > 2 ? 3 : 2;
+        return labels.slice(-n).join('.');
+      } catch { return u; }
+    };
+    const hosts = new Set(urls.map(site));
     add(urls.length >= 4 && urls.length <= 6 && urls.every((u) => u.startsWith('https://')), '4–5 sources, all https (then check_urls.py for 200)', urls.length);
     add(hosts.size >= 3, '≥ 3 different publishers', hosts.size);
   } else if (guide) add(false, '4–5 sources', 'none');
