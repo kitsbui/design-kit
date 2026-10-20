@@ -178,3 +178,43 @@ Thời gian ước tính cho một dự án cỡ FeestFinder (≈ 60 màn, 5 vai
 - Trang chủ vẫn 19 nút trong màn đầu, trên mục tiêu ≤ 12: mỗi thẻ có hai chỗ bấm (tên và trái tim), khung site chiếm 6.
 - Bản dịch Thái, Nhật, Indonesia chưa được người bản ngữ duyệt.
 - Nội dung production: 12 sự kiện, 11 do Radar tìm, TP.HCM có 1. Giao diện không bù được chỗ này.
+
+## 9. Bổ sung 20.10.2026: một ngày làm theo yêu cầu trực tiếp
+
+Sau redesign, chủ dự án gửi từng yêu cầu ngắn (bỏ rail trang chủ, dự án có waitlist, blog song ngữ, cờ thay VI · EN, trang nghệ sĩ như Spotify, bỏ mọi cột bên). Mẫu trang rút ra nằm ở `design-system/patterns.md`; cách viết blog ở `blog-kit/`.
+
+### Đúng, nên giữ
+
+- **Mượn ngữ pháp của một sản phẩm người dùng đã quen.** "Giống Spotify" cho ngay thứ tự (hero, Phát, nổi bật, giới thiệu, nhạc, khoảnh khắc) và mức "long trọng" (tên rất to, một nút nhấn). Không cần artboard để thống nhất.
+- **Tính ở server một lần, vẽ ở client ngay.** Sóng âm MP3: server giải mã (WASM) lúc thêm bài, lưu 600 điểm; trang vẽ vạch SVG tức thì, tải thư viện player khi gần màn, stream file chỉ khi bấm. Không CORS, không CLS, không tải audio người ta không nghe.
+- **Quyết định trước khi vẽ ở proxy, không trong effect.** Ngôn ngữ nhớ bằng cookie, proxy đọc trước khi render: không nhảy chữ, không chuyển ngược người đã chọn.
+- **Ngân sách JS buộc kiến trúc tốt hơn.** Vượt 1 KB ở hai trang dẫn tới: cờ vẽ bằng CSS, tách file copy theo trang, component ít dùng thành dynamic. Không nâng ngân sách lần nào.
+- **Nội dung là sản phẩm có quy trình.** "Tôi chỉ gửi tài liệu" → một skill đầu-cuối (nghiên cứu, song ngữ, nguồn đã kiểm, ảnh có giấy phép, video kiểm bằng oEmbed) + một memory; DB là nguồn thật để admin sửa, repo giữ content pack, job nhập không bao giờ ghi đè bản đã sửa.
+
+### Sai hoặc chậm, lần sau tránh
+
+- **Một yêu cầu gỡ bỏ thường là một quy tắc.** Chủ dự án bỏ rail trang chủ; vài giờ sau phải nói lại "bỏ cột bên phải… cho toàn bộ trang web". Lần sau: khi bị yêu cầu gỡ một mẫu ở một trang, liệt kê mọi trang có mẫu đó và hỏi (hoặc áp luôn) trong cùng lượt.
+- **Đề xuất không có bằng chứng là nhiễu.** "Nghệ sĩ tương tự" (điểm tương đồng tự tính) bị bỏ. Chỉ hiện quan hệ đọc được từ dữ liệu thật (diễn cùng, nơi đã diễn).
+- **Thông tin chính phải đứng cạnh thứ nó giải thích**, không bị đẩy xuống cuối khi gộp cột: dời cột bên xong, kiểm lại từng khối xem nó thuộc về đâu.
+
+### Lỗi đã gặp
+
+| Lỗi | Nguyên nhân | Bài học |
+| --- | --- | --- |
+| Một file `.tsx` phình thành 10 MB | Script Python `s.replace(s[a:b], new)` với `b` tìm từ đầu file nằm trước `a` → chuỗi rỗng → chèn `new` vào giữa mọi ký tự | Luôn tìm mốc kết thúc từ mốc đầu (`s.index(end, a)`), `assert` cả hai mốc và `old != ''`; cứu bằng cách xoá đúng chuỗi đã chèn |
+| Trang dự án sập sau khi đổi API | Cache fetch của Next còn giữ JSON cũ thiếu trường mới | Trường mới đọc ở client có mặc định (`?? []`), guard cho object con |
+| axe `label-content-name-mismatch` ×8 | `aria-label` trên nút hàng bảng thay chữ thấy được | Tên truy cập bắt đầu bằng chữ thấy được; bỏ `aria-label` khi nút đã có chữ |
+| hreflang thiếu / thừa | Bài một ngôn ngữ vẫn khai hai bản | Chỉ khai `alternates` khi hai bản khác nhau thật; còn lại gộp về canonical |
+| Không thử được MP3 thật trong preview | Sandbox chặn mạng của Node (curl vẫn chạy) | Test e2e chặn host bằng `page.route` + file mẫu; ghi rõ giới hạn trong báo cáo |
+| Ngân sách `[Npx]` sắp vượt | Hero mới cần `clamp()` và kích thước avatar | Đặt vào class CSS; xoá code cũ thì hạ ngân sách ngay (104 → 98) |
+
+### Mẫu mới đã chạy tốt
+
+| Màn | Mẫu |
+| --- | --- |
+| Mọi trang công khai | Một cột; cột bên cũ gập ở cuối, trừ thứ cần ngay (đặt liền kề) |
+| Hồ sơ nghệ sĩ | Hero ảnh bìa mờ dần + avatar chồng + tên `clamp` 800 + "Phát" → Sắp diễn (3 thẻ có Mua vé) → Giới thiệu → Nghe (playlist sóng âm, mix) → Khoảnh khắc |
+| Trang sự kiện | Vé ngay sau hero, một hàng từ 760 px; địa điểm: chữ trên, bản đồ 16:9 dưới |
+| Bài viết | Cột giữa 760 px; định nghĩa in đậm mở bài; thông tin nhanh; bảng thành thẻ dưới 560 px; FAQ; nguồn |
+| Ngôn ngữ | Hai lá cờ vẽ bằng CSS; lần đầu một ngôn ngữ mặc định, sau đó ngôn ngữ cuối cùng đã chọn, ở proxy |
+| Điện thoại | Cuộn xuống ẩn khung, cuộn lên hiện lại; dock rơi xuống mép |

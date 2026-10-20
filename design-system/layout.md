@@ -1,6 +1,6 @@
 # Khung trang và mẫu layout
 
-Breakpoint: `tab` 760 (gutter 16 → 32), `desk` 900 (rail thành cột, dock và thanh tab biến mất), `wide` 1200 (ô tìm trong thanh, rail của danh sách). Gutter `--kd-gutter` 16 / 32 / 64. Trang **full width** trên máy tính: `.kd-wrap` không có max-width; chữ dài giữ `max-w-read` (760 px); lưới thêm cột chứ không rộng ra.
+Breakpoint: `tab` 760 (gutter 16 → 32), `desk` 900 (rail thành cột, dock và thanh tab biến mất), `wide` 1200 (ô tìm trong thanh, rail của danh sách). Gutter `--kd-gutter` 16 / 32 / 64. Trang **full width** trên máy tính: `.kd-wrap` không có max-width; chữ dài giữ `max-w-read` (760 px); lưới thêm cột chứ không rộng ra. **Không trang công khai nào có cột bên** (chủ FeestFinder, 20.10.2026): hồ sơ và form nằm ở cột giữa (`max-w-page` 1200 / `max-w-read`), bài viết ở giữa; xem `patterns.md`.
 
 ## Site công khai
 
@@ -24,12 +24,12 @@ Breakpoint: `tab` 760 (gutter 16 → 32), `desk` 900 (rail thành cột, dock v�
   [thẻ dẫn 16:9] [hàng] [hàng]     ← máy tính; ngày ≤ 2 đêm: thẻ dẫn trải ngang
   [hàng] [hàng] [hàng]             ← điện thoại: mọi đêm là hàng (thumb 52 + chữ + giá)
 [ngày 2 …] [tháng sau: một tiêu đề mỗi tháng]
-[rail từ 1200: 7 ngày tới với số đêm, các thành phố với số]
 [footer]
 ```
 
 - Sự kiện đầu tiên **trong màn đầu** ở 390 và 1440 (kiểm tra bằng e2e).
 - Thành phố trước: đoán từ máy (time zone) khi thành phố đó có ≥ 3 đêm, nhớ lựa chọn (kể cả "mọi thành phố"), đánh dấu `<html>` trước first paint và danh sách chờ (ẩn) đúng thành phố để không CLS.
+- Không rail bên danh sách (đã bỏ 20.10.2026): các ngày chiếm cả bề rộng, từ 1100 px thẻ dẫn và các hàng chia đều.
 - Bảng là chế độ nâng cao (`?view=table`) chỉ trên máy tính. Bản đồ là một tab, hỏi dữ liệu khi mở và khi "tìm trong vùng này", không khi kéo.
 - Thẻ: ảnh 16:10 (hoặc tile chữ), **tối đa một nhãn** và chỉ nhãn đổi quyết định; nút lưu trên ảnh; tên 16/600; một dòng meta; giá đậm; không viền, không bóng, không "n quan tâm" khi n = 0.
 
@@ -38,9 +38,9 @@ Breakpoint: `tab` 760 (gutter 16 → 32), `desk` 900 (rail thành cột, dock v�
 ```
 [crumbs]
 [ảnh 16:9 | poster ngày nếu không ảnh]   [kicker · h1 · 4 dữ kiện CHỈ LÀ DỮ KIỆN · (máy tính: nút phụ "Chọn vé") · lưu · chia sẻ · người tổ chức]
-[điện thoại: panel Vé ngay sau hero]
+[panel Vé ngay sau hero ở mọi bề rộng: thẻ dọc dưới 760 px, một hàng (giá · nơi bán | nút) từ 760]
 [lineup] [giới thiệu + thông tin chính gập] [nghe trước]
-[địa điểm: tên, địa chỉ, Chỉ đường · Đặt xe · Chép địa chỉ, bản đồ]
+[địa điểm: tên, địa chỉ, Chỉ đường · Đặt xe · Chép địa chỉ; bản đồ 16:9 bên dưới]
 [Thêm: Đi cùng bạn bè › · Cẩm nang › · Thêm lịch ▾ · Hỏi đáp (n) ▾ · Hype (n) ▾]
 [sắp tới của cùng người tổ chức: hàng, 1 cột điện thoại / 2–3 cột rộng hơn]
 [dock điện thoại: "TỪ 1.200.000₫" + Mua vé]   ← tránh đường khi panel Vé trong tầm nhìn

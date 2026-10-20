@@ -1,6 +1,6 @@
 {
   "name": "design-kit-mcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "MCP server that brings the design kit (tokens, rules, checklist, rubric, learnings, first-screen measurement, gate scaffolding) into any agent session.",
   "type": "module",
